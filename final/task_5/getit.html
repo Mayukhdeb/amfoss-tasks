@@ -1,0 +1,107 @@
+<html>
+    <body background = "forest.jpg">
+        <h1>
+            <center>Get-it using JS</center>
+
+            
+
+            <center><input type="text" placeholder="username" id="myInput">
+        
+                <button type="button" onclick="getInputVal();">Find GitHub user </button>
+    </center>
+            
+    
+   <center><p style="font-family: monospace" >email -- 
+        <br><div id="email">
+    
+        </div></br></p>
+    
+        <p style="font-family: monospace" >bio -- 
+        <br><div id="bio">
+    
+        </div></br>
+    
+        <p style="font-family: monospace" >avatar --  </p>
+       <img id="avatar" height="200" width="200">
+    
+    </img></center>
+    
+
+    <script>
+
+function getInputVal() {
+                
+                var login = document.getElementById("myInput").value;
+                var query = `query get_details($login: String!) {
+                                user(login: $login) {
+                                    email
+                                    bio
+                                    avatarUrl
+                                    
+                                    
+                                }
+                                    
+                                    
+                                
+                            }`
+                fetch('https://api.github.com/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': 'bearer 7e9020c4c68cda479dcf33393a99095335191633',
+                    },
+                    body: JSON.stringify({
+                        query,
+                        variables: { login },
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                            if(data.data.user!=null){
+
+                            document.getElementById("email").innerHTML =  data.data.user.email;
+                            document.getElementById("bio").innerHTML = data.data.user.bio;
+                            document.getElementById("avatar").src = data.data.user.avatarUrl;
+
+
+                            
+                            }
+                            
+                            
+                            else{
+                              alert("no users found !, try again  ")
+                            }
+                    }).catch(function(err){
+                        console.log('oopsie ! an error occurred  ', err);
+                    });
+            }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </script>
